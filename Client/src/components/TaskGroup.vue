@@ -1,20 +1,22 @@
 <template>
-    <h1 style="text-align: center;">Task Group</h1>
-    <div class="task-group">
-    <div class="card">
-      <div class="card-content">
-        <h2>{{ groupName }}</h2>
-        <div class="task-item-container">
-          <TaskItem v-for="(task, index) in tasks" :key="index" :task="task" />
+    <div>
+        <h1 style="text-align: center;">Task Group</h1>
+        <div class="task-group">
+            <div class="card">
+                <div class="card-content">
+                    <h2>{{ groupName }}</h2>
+                    <div class="task-item-container">
+                        <TaskItem v-for="(task, index) in tasks" :key="index" :task="task" />
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </template>
-
 
 <script>
 import TaskItem from './TaskItem.vue';
+import axios from 'axios';
 
 export default {
     components: {
@@ -28,38 +30,28 @@ export default {
     },
     data() {
         return {
-            tasks: [
-                {
-                    "taskName": "Tarea 1",
-                    "taskStatus": "Pendiente",
-                    "taskDescription": "Descripción de la tarea 1"
-                },
-                {
-                    "taskName": "Tarea 2",
-                    "taskStatus": "En progreso",
-                    "taskDescription": "Descripción de la tarea 2"
-                },
-                {
-                    "taskName": "Tarea 3",
-                    "taskStatus": "Completado",
-                    "taskDescription": "Descripción de la tarea 3"
-                },
-                {
-                    "taskName": "Tarea 4",
-                    "taskStatus": "En Proceso",
-                    "taskDescription": "Descripción de la tarea 4"
-                },
-                {
-                    "taskName": "Tarea 5",
-                    "taskStatus": "Bloqueada",
-                    "taskDescription": "Descripción de la tarea 5"
-                }
-            ]
+            tasks: []
         };
+    },
+    mounted() {
+        axios.get('http://127.0.0.1:8000/api/tasks')
+            .then(response => {
+                console.log('Datos recibidos de la API:', response.data); // Imprimir los datos recibidos de la API en la consola
+                // Comprueba si los datos son un array y no están vacíos antes de asignarlos
+                if (Array.isArray(response.data) && response.data.length > 0) {
+                    // Asigna los datos a la propiedad tasks
+                    this.tasks = response.data;
+                } else {
+                    console.warn('La respuesta de la API no contiene datos válidos.');
+                }
+            })
+            .catch(error => {
+                console.error('Error al obtener las tareas:', error);
+            });
     }
+
 };
 </script>
-
 
 <style scoped>
 .card {
