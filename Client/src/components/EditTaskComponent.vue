@@ -20,12 +20,12 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="assignee">Encargado:</label>
-        <input type="text" id="assignee" v-model="editedTask.assignee" required>
+        <label for="assignee">Responsable:</label>
+        <input type="text" id="assignee" v-model="editedTask.responsable" required>
       </div>
       <div class="form-group">
         <label for="due-date">Fecha Límite:</label>
-        <input type="date" id="due-date" v-model="editedTask.dueDate" required>
+        <input type="date" id="due-date" v-model="editedTask.fechaLimite" required>
       </div>
       <button type="submit">Actualizar</button>
     </form>
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   props: ['taskToEdit'],
   data() {
@@ -40,11 +42,33 @@ export default {
       editedTask: { ...this.taskToEdit }
     };
   },
+  created() {
+    // Recupera el ID de la tarea de los parámetros de la ruta en la URL
+    const taskId = this.$route.params.id;
+    if (taskId) {
+      axios.get(`http://127.0.0.1:8000/api/tasks/${taskId}`)
+        .then(response => {
+          // Inicializa el formulario con los datos de la tarea recuperados
+          this.editedTask = response.data;
+        })
+        .catch(error => {
+          console.error('Error al obtener la tarea:', error);
+        });
+    }
+  },
   methods: {
     updateTask() {
-      // Aquí puedes manejar la lógica para actualizar la tarea
-      console.log('Tarea actualizada:', this.editedTask);
+      axios.put(`http://127.0.0.1:8000/api/tasks/${this.editedTask.id}`, this.editedTask)
+        .then(response => {
+          console.log('Tarea actualizada:', response.data);
+          // Aquí podrías emitir un evento o realizar otras acciones necesarias después de la actualización exitosa
+        })
+        .catch(error => {
+          console.error('Error al actualizar la tarea:', error);
+          // Aquí podrías manejar el error de alguna manera, por ejemplo, mostrando un mensaje al usuario
+        });
     }
+
   }
 };
 </script>

@@ -34,6 +34,7 @@
 <script>
 import axios from 'axios';
 import router from '@/router';
+import { mapActions } from 'vuex';
 
 export default {
     props: {
@@ -51,6 +52,14 @@ export default {
 
     },
     methods: {
+        ...mapActions(['setTaskToEdit']),
+        editTask(event) {
+            event.stopPropagation();
+            console.log("Editar tarea:", this.task);
+            this.setTaskToEdit(this.task);
+            // Redirige a la ruta de edición
+            router.push({ name: 'edittask', params: { id: this.task.id } });
+        },
         formattedDate(dateString) {
             const date = new Date(dateString);
             return date.toLocaleDateString('es-ES');
@@ -62,13 +71,13 @@ export default {
             console.log("Cerrando Modal")
             this.showModal = false;
         },
-        editTask(event) {
-            event.stopPropagation();
-            console.log("Editar tarea:", this.task);
+        // editTask(event) {
+        //     event.stopPropagation();
+        //     console.log("Editar tarea:", this.task);
 
-            // Redirige a la ruta deseada
-            router.push(`/edittask/${this.task.id}`);
-        },
+        //     // Redirige a la ruta deseada con los datos de la tarea como parámetros de consulta
+        //     router.push({ name: 'edittask', params: { id: this.task.id } });
+        // },
         deleteTask(event) {
             event.stopPropagation();
             console.log("Eliminar tarea:", this.task);
@@ -101,12 +110,10 @@ export default {
 .task-detail {
     margin: 0;
     font-size: 14px;
-    /* Tamaño de fuente más pequeño */
 }
 
 .task-actions {
     margin-top: 10px;
-    /* Espacio entre los detalles y los botones de acción */
 }
 
 
@@ -118,7 +125,6 @@ export default {
 .task-detail {
     margin: 0;
     font-size: 14px;
-    /* Tamaño de fuente más pequeño */
 }
 
 
@@ -146,12 +152,12 @@ export default {
 }
 
 .task-name {
-    font-size: 24px; /* Ajustar el tamaño del título */
-    font-weight: bold; /* Hacer el título más prominente */
-    max-width: 70%; /* Establecer un ancho máximo para el título */
-    overflow: hidden; /* Ocultar el texto que sobresale del ancho máximo */
-    text-overflow: ellipsis; /* Agregar puntos suspensivos para indicar texto truncado */
-    white-space: nowrap; /* Evitar que el texto se envuelva a la siguiente línea */
+    font-size: 24px;
+    font-weight: bold;
+    max-width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 

@@ -1,28 +1,31 @@
 <template>
     <div>
-      <NewTask v-if="mode === 'new'"/>
-      <EditTask v-if="mode === 'edit'" :task="taskToEdit"/>
+      <NewTask v-if="isRoute('newtask')"/>
+      <EditTask v-if="isRoute('edittask')" :task="taskToEdit"/>
     </div>
   </template>
   
   <script>
   import NewTask from '../components/NewTaskComponent.vue';
   import EditTask from '../components/EditTaskComponent.vue';
+  import { useRoute } from 'vue-router';
   
   export default {
     components: {
       NewTask,
       EditTask
     },
-    data() {
+    setup() {
+      const route = useRoute();
+  
+      const isRoute = (routeName) => {
+        return route.name === routeName;
+      };
+  
       return {
-        mode: 'new', // Modo por defecto es nuevo
-        taskToEdit: null // Tarea para editar
+        isRoute
       };
     }
   };
   </script>
-  
-  <style scoped>
-  </style>
   
