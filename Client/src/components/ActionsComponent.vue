@@ -1,16 +1,11 @@
 <template>
-  <h1 style="text-align: center;">ActionsComponent</h1>
-    <div class="actions-card">
-    <div class="card">
-      <div class="card-content">
-        <div class="filter-buttons">
-          <button class="button-new" @click="addNewTask()"><i class="fas fa-plus"></i> Nuevo</button>
-          <button class="in-process" @click="filterTasks('en proceso')">En Proceso</button>
-          <button class="pending" @click="filterTasks('pendiente')">Pendiente</button>
-          <button class="blocked" @click="filterTasks('bloqueado')">Bloqueado</button>
-          <button class="completed" @click="filterTasks('completado')">Completado</button>
-        </div>
-      </div>
+  <div class="actions-container">
+    <div class="actions-buttons">
+      <button class="action-button new-task" @click="addNewTask"><i class="fas fa-plus"></i> Nueva Tarea</button>
+      <button class="action-button yellow" @click="filterTasks('en proceso')">En Proceso</button>
+      <button class="action-button red" @click="filterTasks('pendiente')">Pendiente</button>
+      <button class="action-button gray" @click="filterTasks('bloqueado')">Bloqueado</button>
+      <button class="action-button green" @click="filterTasks('completado')">Completado</button>
     </div>
   </div>
 </template>
@@ -21,13 +16,10 @@ import router from '@/router';
 export default {
   methods: {
     addNewTask() {
-      // Lógica para agregar una nueva tarea
       console.log('Nueva tarea agregada');
-
-      router.push(`/newtask`);
+      router.push(`/newtask`); // Redirige al usuario a la ruta '/nueva-tarea'
     },
     filterTasks(filterType) {
-      // Lógica para filtrar tareas según el tipo
       console.log('Filtrar tareas por:', filterType);
     }
   }
@@ -35,41 +27,59 @@ export default {
 </script>
 
 <style scoped>
-.actions-card {
-  width: 100%; /* Ocupa todo el ancho disponible */
+.actions-container {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.filter-buttons {
-  margin-top: 10px;
+.actions-title {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.actions-buttons {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Cambio a columna */
+  align-items: center;
+  margin-top: 40px;
 }
 
-.filter-buttons button {
-  margin-bottom: 5px;
-  height: 40px;
-  border-radius: 10px;
+.action-button {
   margin: 5px;
+  padding: 10px 20px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 16px;
+  border: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.button-new{
-  background-color: lightskyblue;
+.action-button i {
+  margin-right: 5px;
 }
 
-.in-process {
+.yellow {
   background-color: #FFD700; /* Amarillo */
 }
 
-.pending {
+.red {
   background-color: #FF6347; /* Rojo */
 }
 
-.blocked {
+.gray {
   background-color: lightgray; /* Gris */
 }
 
-.completed {
-  background-color: #32CD32; /* Verde */
+.green {
+  color: black;
+  background-color: lightgreen; /* Verde */
+}
+
+.new-task {
+  margin-bottom: 50px;
+  background-color: lightskyblue;
 }
 </style>

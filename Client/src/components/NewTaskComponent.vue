@@ -1,7 +1,7 @@
 <template>
   <div class="new-task-form">
     <h1 style="text-align: center;">Nueva Tarea</h1>
-    <form @submit.prevent="addNewTask">
+    <form @submit.prevent="addNewTask()">
       <div class="form-group">
         <label for="title">Título:</label>
         <input type="text" id="title" v-model="task.title" required>
@@ -20,12 +20,12 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="assignee">Encargado:</label>
-        <input type="text" id="assignee" v-model="task.assignee" required>
+        <label for="assignee">Responsable:</label>
+        <input type="text" id="assignee" v-model="task.responsable" required>
       </div>
       <div class="form-group">
         <label for="due-date">Fecha Límite:</label>
-        <input type="date" id="due-date" v-model="task.dueDate" required>
+        <input type="date" id="due-date" v-model="task.fechaLimite" required>
       </div>
       <button type="submit">Guardar</button>
     </form>
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -47,8 +49,15 @@ export default {
   },
   methods: {
     addNewTask() {
-      // Aquí puedes manejar la lógica para guardar la nueva tarea
-      console.log('Nueva tarea:', this.task);
+      axios.post('http://127.0.0.1:8000/api/tasks', this.task) // Aquí asumimos que la URL '/api/tasks' maneja la creación de nuevas tareas
+        .then(response => {
+          console.log('Tarea guardada exitosamente:', response.data);
+          // Puedes redirigir al usuario a otra página después de guardar la tarea si es necesario
+          this.$router.push('/');
+        })
+        .catch(error => {
+          console.error('Error al guardar la tarea:', error);
+        });
     }
   }
 };

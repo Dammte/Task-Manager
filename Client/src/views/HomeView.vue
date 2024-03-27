@@ -1,4 +1,5 @@
 <template>
+      <Navbar />
   <main>
     <div class="home-view">
       <div class="actions-wrapper">
@@ -14,11 +15,13 @@
 <script>
 import TaskGroup from '../components/TaskGroup.vue';
 import ActionsComponent from '../components/ActionsComponent.vue'
+import Navbar from '../components/NavbarComponent.vue'
 
 export default {
   components: {
     TaskGroup,
-    ActionsComponent
+    ActionsComponent,
+    Navbar
   }
 };
 </script>

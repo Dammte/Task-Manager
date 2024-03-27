@@ -1,18 +1,16 @@
 <template>
-    <div>
-        <h1 style="text-align: center;">Task Group</h1>
-        <div class="task-group">
-            <div class="card">
-                <div class="card-content">
-                    <h2>{{ groupName }}</h2>
-                    <div class="task-item-container">
-                        <TaskItem v-for="(task, index) in tasks" :key="index" :task="task" />
-                    </div>
+    <div class="task-group">
+        <div class="card">
+            <div class="card-content">
+                <h2>{{ groupName }}</h2>
+                <div class="task-item-container" style="height: 380px; overflow-y: auto;">
+                    <TaskItem v-for="(task, index) in tasks" :key="index" :task="task" />
                 </div>
             </div>
         </div>
     </div>
 </template>
+
 
 <script>
 import TaskItem from './TaskItem.vue';
@@ -55,14 +53,14 @@ export default {
 
 <style scoped>
 .card {
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 8px;
     padding: 16px;
     margin: 16px;
 }
 
 .task-group {
-    margin: 20px;
+    margin: 40px;
 }
 
 .task-group {

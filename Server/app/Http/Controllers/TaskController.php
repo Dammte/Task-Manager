@@ -21,7 +21,9 @@ class TaskController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string',
             'description' => 'required|string',
-            // Agrega otras reglas de validación según sea necesario
+            'status' => 'required|string',
+            'responsable' => 'required|string',
+            'fechaLimite' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -31,11 +33,12 @@ class TaskController extends Controller
         $task = Task::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-            'creation_date' => now(), // Opcional, puedes ajustar esto según tus necesidades
+            'creation_date' => now(),
             'created_at' => now(),
             'updated_at' => now(),
             'status' => $request->input('status'),
-            // Agrega otros campos según sea necesario
+            'responsable' => $request->input('responsable'),
+            'fechaLimite' => $request->input('fechaLimite')
         ]);
 
         return response()->json([
