@@ -39,11 +39,9 @@
       })
       .then(response => {
         console.log(response.data);
-        // Aquí podrías redirigir al usuario a una página de inicio de sesión u otra página de tu aplicación
       })
       .catch(error => {
         console.error(error);
-        // Aquí podrías mostrar un mensaje de error al usuario
       });
     }
   }

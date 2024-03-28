@@ -68,7 +68,6 @@ export default {
             event.stopPropagation();
             console.log("Editar tarea:", this.task);
             this.setTaskToEdit(this.task);
-            // Redirige a la ruta de edición
             router.push({ name: 'edittask', params: { id: this.task.id } });
         },
         formattedDate(dateString) {
@@ -89,7 +88,6 @@ export default {
             axios.delete(`http://127.0.0.1:8000/api/tasks/${this.task.id}`)
                 .then(response => {
                     console.log('Tarea eliminada:', response.data);
-                    // Elimina la tarea de la lista de tareas
                     const index = this.$parent.tasks.findIndex(item => item.id === this.task.id);
                     if (index !== -1) {
                         this.$parent.tasks.splice(index, 1);
@@ -100,7 +98,6 @@ export default {
                 });
         },
         handleFileUpload(event) {
-            // Manejar la carga de archivos aquí
             const files = event.target.files;
             console.log("Archivos cargados:", files);
         }

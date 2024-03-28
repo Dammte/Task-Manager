@@ -46,10 +46,16 @@
   }
   
   .navbar h2.title {
-    margin: 0;
-    font-size: 20px;
-    margin-left: 30px;
-  }
+  margin: 0;
+  font-size: 23px;
+  margin-left: 70px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px; 
+  color: #333; 
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
   
   .logout-button {
     background-color: transparent;
@@ -63,5 +69,7 @@
   .logout-button i {
     margin-right: 5px;
   }
+
+  
   </style>
   

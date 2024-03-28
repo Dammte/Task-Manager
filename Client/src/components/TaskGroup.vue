@@ -74,7 +74,6 @@ export default {
             this.filterType = filterType;
         },
         searchTasks() {
-            // Realiza la búsqueda solo si hay un término de búsqueda
             if (this.searchQuery.trim() !== '') {
                 axios.get('http://127.0.0.1:8000/api/tasks/search', {
                     params: {
@@ -89,7 +88,6 @@ export default {
                     console.error('Error al buscar tareas:', error);
                 });
             } else {
-                // Si el campo de búsqueda está vacío, vuelve a cargar todas las tareas
                 this.fetchTasks();
             }
         }

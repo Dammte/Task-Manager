@@ -54,11 +54,9 @@ export default {
             })
                 .then(response => {
                     console.log(response.data);
-                    // Redireccionar al usuario a una página después del inicio de sesión
                 })
                 .catch(error => {
                     console.error(error.response.data);
-                    // Mostrar mensaje de error al usuario
                 });
         },
         openModal() {

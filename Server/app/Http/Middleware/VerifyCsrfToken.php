@@ -12,7 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        // Agrega aquí las rutas que quieres excluir de la verificación CSRF
         '/tasks',
     ];
 }

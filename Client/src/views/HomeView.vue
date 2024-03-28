@@ -26,13 +26,12 @@ export default {
   },
   data() {
     return {
-      tasks: [], // Todas las tareas
-      filteredTasks: [] // Tareas filtradas
+      tasks: [],
+      filteredTasks: [] 
     };
   },
   methods: {
     handleFilter(filterType) {
-      // Filtrar las tareas según el tipo seleccionado
       this.filteredTasks = this.tasks.filter(task => task.status === filterType);
     },
     fetchTasks() {
@@ -41,7 +40,7 @@ export default {
               console.log('Datos recibidos de la API:', response.data);
               if (Array.isArray(response.data) && response.data.length > 0) {
                   this.tasks = response.data;
-                  this.filteredTasks = response.data; // Inicialmente, mostrar todas las tareas
+                  this.filteredTasks = response.data;
               } else {
                   console.warn('La respuesta de la API no contiene datos válidos.');
               }
@@ -52,7 +51,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchTasks(); // Obtener las tareas al montar el componente
+    this.fetchTasks();
   }
 };
 </script>

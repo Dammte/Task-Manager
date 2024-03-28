@@ -12,7 +12,6 @@ class ForgotPasswordController extends Controller
     {
         $request->validate(['email' => 'required|email']);
 
-        // Enviar el correo de restablecimiento de contraseña
         $response = $this->broker()->sendResetLink(
             $request->only('email')
         );
