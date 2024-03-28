@@ -23,6 +23,16 @@ const router = createRouter({
       path: '/edittask/:id',
       name: 'edittask',
       component: () => import('../views/TaskView.vue')
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/AuthView.vue')
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: () => import('../views/AuthView.vue')
     }
   ]
 })

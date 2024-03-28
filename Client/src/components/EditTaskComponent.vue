@@ -1,6 +1,6 @@
 <template>
   <div class="edit-task-form">
-    <h1 style="text-align: center;">Editar Tarea</h1>
+    <h2>Editar Tarea</h2>
     <form @submit.prevent="updateTask">
       <div class="form-group">
         <label for="title">Título:</label>
@@ -34,6 +34,7 @@
 
 <script>
 import axios from 'axios';
+import router from '@/router';
 
 export default {
   props: ['taskToEdit'],
@@ -43,12 +44,10 @@ export default {
     };
   },
   created() {
-    // Recupera el ID de la tarea de los parámetros de la ruta en la URL
     const taskId = this.$route.params.id;
     if (taskId) {
       axios.get(`http://127.0.0.1:8000/api/tasks/${taskId}`)
         .then(response => {
-          // Inicializa el formulario con los datos de la tarea recuperados
           this.editedTask = response.data;
         })
         .catch(error => {
@@ -61,11 +60,10 @@ export default {
       axios.put(`http://127.0.0.1:8000/api/tasks/${this.editedTask.id}`, this.editedTask)
         .then(response => {
           console.log('Tarea actualizada:', response.data);
-          // Aquí podrías emitir un evento o realizar otras acciones necesarias después de la actualización exitosa
+          this.$router.push('/');
         })
         .catch(error => {
           console.error('Error al actualizar la tarea:', error);
-          // Aquí podrías manejar el error de alguna manera, por ejemplo, mostrando un mensaje al usuario
         });
     }
 
@@ -77,6 +75,16 @@ export default {
 .edit-task-form {
   max-width: 400px;
   margin: 0 auto;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f7f7f7;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .form-group {
@@ -86,6 +94,7 @@ export default {
 label {
   display: block;
   font-weight: bold;
+  color: #555;
 }
 
 input[type="text"],
@@ -93,24 +102,34 @@ textarea,
 select,
 input[type="date"] {
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
   box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position-x: calc(100% - 10px);
+  background-position-y: center;
+  padding-right: 30px;
 }
 
 button {
   background-color: #4CAF50;
   color: white;
-  padding: 12px 20px;
+  padding: 14px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   width: 100%;
   font-size: 16px;
+  transition: background-color 0.3s;
 }
 
 button:hover {

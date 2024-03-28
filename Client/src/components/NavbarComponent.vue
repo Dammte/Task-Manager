@@ -12,11 +12,19 @@
   </template>
   
   <script>
+  import axios from 'axios';
+
   export default {
     methods: {
       logout() {
-        // Aquí iría la lógica para cerrar sesión
-        console.log('Logout realizado');
+        axios.post('http://127.0.0.1:8000/api/logout')
+          .then(response => {
+            console.log('Logout realizado');
+            this.$router.push('/login');
+          })
+          .catch(error => {
+            console.error('Error al intentar cerrar sesión:', error);
+          });
       }
     }
   };

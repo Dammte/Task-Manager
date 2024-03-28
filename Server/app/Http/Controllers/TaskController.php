@@ -56,6 +56,50 @@ class TaskController extends Controller
         return response()->json($task);
     }
 
+    public function search(Request $request)
+    {
+        $searchQuery = $request->input('query');
+
+        $tasks = Task::where('title', 'like', "%$searchQuery%")
+                    ->orWhere('description', 'like', "%$searchQuery%")
+                    ->orWhere('status', 'like', "%$searchQuery%")
+                    ->orWhere('responsable', 'like', "%$searchQuery%")
+                    ->orWhere('fechaLimite', 'like', "%$searchQuery%")
+                    ->get();
+
+        return response()->json($tasks);
+    }
+
+    public function storeCommentsAndDocuments(Request $request, $id)
+    {
+        $request->validate([
+            'comment' => 'nullable|string',
+            'file' => 'nullable|file|max:2048',
+        ]);
+
+        $task = Task::find($id);
+        if ($task) {
+            $task->comments()->create([
+                'comment' => $request->input('comment'),
+            ]);
+
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('uploads', $fileName);
+                $task->documents()->create([
+                    'file_path' => $filePath,
+                ]);
+            }
+
+            return response()->json(['message' => 'Comentario y documento guardados correctamente'], 200);
+        }
+
+        return response()->json(['error' => 'La tarea no se encontró'], 404);
+    }
+
+
+
     // Actualizar una tarea existente
     public function update(Request $request, $id)
     {

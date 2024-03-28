@@ -2,28 +2,40 @@
   <div class="actions-container">
     <div class="actions-buttons">
       <button class="action-button new-task" @click="addNewTask"><i class="fas fa-plus"></i> Nueva Tarea</button>
-      <button class="action-button yellow" @click="filterTasks('en proceso')">En Proceso</button>
-      <button class="action-button red" @click="filterTasks('pendiente')">Pendiente</button>
-      <button class="action-button gray" @click="filterTasks('bloqueado')">Bloqueado</button>
-      <button class="action-button green" @click="filterTasks('completado')">Completado</button>
+      <button class="action-button yellow" @click="filterTasks('en proceso')">
+        En Proceso<span v-if="taskCounts['en proceso']"> ({{ taskCounts['en proceso'] }})</span>
+      </button>
+      <button class="action-button red" @click="filterTasks('pendiente')">
+        Pendiente<span v-if="taskCounts['pendiente']"> ({{ taskCounts['pendiente'] }})</span>
+      </button>
+      <button class="action-button gray" @click="filterTasks('bloqueado')">
+        Bloqueado<span v-if="taskCounts['bloqueado']"> ({{ taskCounts['bloqueado'] }})</span>
+      </button>
+      <button class="action-button green" @click="filterTasks('completado')">
+        Completado<span v-if="taskCounts['completado']"> ({{ taskCounts['completado'] }})</span>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 import router from '@/router';
+import axios from 'axios';
 
 export default {
+  data() {
+    return {
+      tasks: [],
+      taskCounts: {}
+    };
+  },
   methods: {
     addNewTask() {
       console.log('Nueva tarea agregada');
-      router.push(`/newtask`); // Redirige al usuario a la ruta '/nueva-tarea'
-    },
-    filterTasks(filterType) {
-      console.log('Filtrar tareas por:', filterType);
+      router.push(`/newtask`);
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -39,7 +51,8 @@ export default {
 
 .actions-buttons {
   display: flex;
-  flex-direction: column; /* Cambio a columna */
+  flex-direction: column;
+  /* Cambio a columna */
   align-items: center;
   margin-top: 40px;
 }
@@ -62,20 +75,24 @@ export default {
 }
 
 .yellow {
-  background-color: #FFD700; /* Amarillo */
+  background-color: #FFD700;
+  /* Amarillo */
 }
 
 .red {
-  background-color: #FF6347; /* Rojo */
+  background-color: #FF6347;
+  /* Rojo */
 }
 
 .gray {
-  background-color: lightgray; /* Gris */
+  background-color: lightgray;
+  /* Gris */
 }
 
 .green {
   color: black;
-  background-color: lightgreen; /* Verde */
+  background-color: lightgreen;
+  /* Verde */
 }
 
 .new-task {

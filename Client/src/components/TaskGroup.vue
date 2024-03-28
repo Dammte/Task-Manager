@@ -1,15 +1,21 @@
 <template>
     <div class="task-group">
-        <div class="card">
+        <div class="card search-card">
             <div class="card-content">
                 <h2>{{ groupName }}</h2>
-                <div class="task-item-container" style="height: 380px; overflow-y: auto;">
-                    <TaskItem v-for="(task, index) in tasks" :key="index" :task="task" />
+                <input type="text" v-model="searchQuery" @input="searchTasks" placeholder="Buscar tarea..." class="search-box">
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <div class="task-item-container" style="height: 325px; overflow-y: auto;">
+                    <TaskItem v-for="(task, index) in filteredTasks" :key="index" :task="task" />
                 </div>
             </div>
         </div>
     </div>
 </template>
+
 
 
 <script>
@@ -28,24 +34,65 @@ export default {
     },
     data() {
         return {
-            tasks: []
+            tasks: [],
+            filterType: null,
+            searchQuery: ''
         };
     },
+    computed: {
+        filteredTasks() {
+            let filteredTasks = this.tasks;
+            if (this.filterType) {
+                filteredTasks = filteredTasks.filter(task => task.estado === this.filterType);
+            }
+            if (this.searchQuery.trim() !== '') {
+                const searchTerm = this.searchQuery.trim().toLowerCase();
+                filteredTasks = filteredTasks.filter(task => task.nombre.toLowerCase().includes(searchTerm));
+            }
+            return filteredTasks;
+        }
+    },
     mounted() {
-        axios.get('http://127.0.0.1:8000/api/tasks')
-            .then(response => {
-                console.log('Datos recibidos de la API:', response.data); // Imprimir los datos recibidos de la API en la consola
-                // Comprueba si los datos son un array y no están vacíos antes de asignarlos
-                if (Array.isArray(response.data) && response.data.length > 0) {
-                    // Asigna los datos a la propiedad tasks
+        this.fetchTasks();
+    },
+    methods: {
+        fetchTasks() {
+            axios.get('http://127.0.0.1:8000/api/tasks')
+                .then(response => {
+                    console.log('Datos recibidos de la API:', response.data);
+                    if (Array.isArray(response.data) && response.data.length > 0) {
+                        this.tasks = response.data;
+                    } else {
+                        console.warn('La respuesta de la API no contiene datos válidos.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al obtener las tareas:', error);
+                });
+        },
+        handleFilter(filterType) {
+            this.filterType = filterType;
+        },
+        searchTasks() {
+            // Realiza la búsqueda solo si hay un término de búsqueda
+            if (this.searchQuery.trim() !== '') {
+                axios.get('http://127.0.0.1:8000/api/tasks/search', {
+                    params: {
+                        query: this.searchQuery
+                    }
+                })
+                .then(response => {
+                    console.log('Resultados de búsqueda:', response.data);
                     this.tasks = response.data;
-                } else {
-                    console.warn('La respuesta de la API no contiene datos válidos.');
-                }
-            })
-            .catch(error => {
-                console.error('Error al obtener las tareas:', error);
-            });
+                })
+                .catch(error => {
+                    console.error('Error al buscar tareas:', error);
+                });
+            } else {
+                // Si el campo de búsqueda está vacío, vuelve a cargar todas las tareas
+                this.fetchTasks();
+            }
+        }
     }
 
 };
@@ -53,26 +100,57 @@ export default {
 
 <style scoped>
 .card {
-    border: 1px solid black;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 16px;
+    padding: 10px;
     margin: 16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .task-group {
-    margin: 40px;
+    margin: 10px;
 }
 
-.task-group {
-    margin-bottom: 20px;
-    /* Espacio entre grupos */
+.search-box {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .task-item-container {
-    /* Estilos para contenedor de tareas */
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    /* Espacio entre las tarjetas de tarea */
+}
+
+.task-item-container > * {
+    flex: 1 1 calc(50% - 10px);
+    /* Cambia esto según el diseño deseado */
+}
+
+.task-item-container > .task-item {
+    flex-basis: 100%;
+}
+
+.task-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.task-item h3 {
+    margin-top: 0;
+}
+
+.task-item p {
+    margin-bottom: 0;
+}
+
+.search-card {
+    padding: 12px;
 }
 </style>

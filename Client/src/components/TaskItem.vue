@@ -13,11 +13,11 @@
                 </div>
             </div>
         </div>
-        <div v-if="showModal" class="modal-overlay">
-            <div class="modal-container">
+        <div v-if="showModal" class="modal-overlay" @click="closeModal">
+            <div class="modal-container" @click.stop>
                 <div class="modal-header">
                     <h3>Detalles de la tarea</h3>
-                    <button @click="closeModal" class="close-button">Cerrar</button>
+                    <button @click.stop="closeModal" class="close-button">Cerrar</button>
                 </div>
                 <div class="modal-body">
                     <p><strong>Nombre:</strong> {{ task.title }}</p>
@@ -25,11 +25,21 @@
                     <p><strong>Descripción:</strong> {{ task.description }}</p>
                     <p><strong>Responsable:</strong> {{ task.responsable }}</p>
                     <p><strong>Fecha Limite:</strong> {{ formattedDate(task.fechaLimite) }}</p>
+                    
+                    <!-- Agregar campo para cargar archivos -->
+                    <input type="file" @change="handleFileUpload" multiple>
+                    
+                    <!-- Agregar campo para comentarios -->
+                    <textarea v-model="comment" placeholder="Añadir comentarios"></textarea>
+                
+                    <button @click="saveImageOrDocument" class="save-button">Guardar</button>
+
                 </div>
             </div>
         </div>
     </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -45,7 +55,8 @@ export default {
     },
     data() {
         return {
-            showModal: false
+            showModal: false,
+            comment: ''
         };
     },
     computed: {
@@ -71,13 +82,6 @@ export default {
             console.log("Cerrando Modal")
             this.showModal = false;
         },
-        // editTask(event) {
-        //     event.stopPropagation();
-        //     console.log("Editar tarea:", this.task);
-
-        //     // Redirige a la ruta deseada con los datos de la tarea como parámetros de consulta
-        //     router.push({ name: 'edittask', params: { id: this.task.id } });
-        // },
         deleteTask(event) {
             event.stopPropagation();
             console.log("Eliminar tarea:", this.task);
@@ -94,6 +98,11 @@ export default {
                 .catch(error => {
                     console.error('Error al eliminar la tarea:', error);
                 });
+        },
+        handleFileUpload(event) {
+            // Manejar la carga de archivos aquí
+            const files = event.target.files;
+            console.log("Archivos cargados:", files);
         }
     }
 };
@@ -239,5 +248,81 @@ export default {
 
 .modal-body {
     font-size: 16px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%; /* Cambiado a 80% para que sea más ancho */
+    max-width: 600px; /* Establecido un ancho máximo */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Añadida una sombra */
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd; /* Línea separadora */
+    padding-bottom: 10px; /* Espaciado inferior */
+}
+
+.close-button {
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #777;
+}
+
+.modal-body {
+    font-size: 16px;
+}
+
+.modal-body p {
+    margin-bottom: 10px; /* Espaciado entre elementos */
+}
+
+.modal-body input[type="file"] {
+    margin-bottom: 10px; /* Espaciado entre elementos */
+}
+
+.modal-body textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical; /* Permitir ajuste vertical */
+    margin-bottom: 10px; /* Espaciado inferior */
+}
+
+.save-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+    background-color: #45a049;
 }
 </style>

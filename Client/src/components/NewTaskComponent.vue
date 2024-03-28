@@ -1,7 +1,7 @@
 <template>
   <div class="new-task-form">
-    <h1 style="text-align: center;">Nueva Tarea</h1>
-    <form @submit.prevent="addNewTask()">
+    <h2>Nueva Tarea</h2>
+    <form @submit.prevent="addNewTask">
       <div class="form-group">
         <label for="title">Título:</label>
         <input type="text" id="title" v-model="task.title" required>
@@ -42,17 +42,16 @@ export default {
         title: '',
         description: '',
         status: 'en proceso',
-        assignee: '',
-        dueDate: ''
+        responsable: '',
+        fechaLimite: ''
       }
     };
   },
   methods: {
     addNewTask() {
-      axios.post('http://127.0.0.1:8000/api/tasks', this.task) // Aquí asumimos que la URL '/api/tasks' maneja la creación de nuevas tareas
+      axios.post('http://127.0.0.1:8000/api/tasks', this.task)
         .then(response => {
           console.log('Tarea guardada exitosamente:', response.data);
-          // Puedes redirigir al usuario a otra página después de guardar la tarea si es necesario
           this.$router.push('/');
         })
         .catch(error => {
@@ -65,8 +64,18 @@ export default {
 
 <style scoped>
 .new-task-form {
-  max-width: 400px;
+  max-width: 500px;
   margin: 0 auto;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .form-group {
@@ -74,8 +83,8 @@ export default {
 }
 
 label {
-  display: block;
   font-weight: bold;
+  color: #555;
 }
 
 input[type="text"],
@@ -83,24 +92,34 @@ textarea,
 select,
 input[type="date"] {
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
   box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position-x: calc(100% - 10px);
+  background-position-y: center;
+  padding-right: 30px;
 }
 
 button {
   background-color: #4CAF50;
   color: white;
-  padding: 12px 20px;
+  padding: 14px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   width: 100%;
   font-size: 16px;
+  transition: background-color 0.3s;
 }
 
 button:hover {
